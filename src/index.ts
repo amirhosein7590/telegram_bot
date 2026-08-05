@@ -1,13 +1,20 @@
 import http from "node:http";
-import { bot } from "./app/bot";
+import { telegramWebhook } from "./webhook/telegram.webhook";
 
 const PORT = Number(process.env.PORT) || 3000;
 
 http
   .createServer((req, res) => {
-    if (req.url === "/health") {
+    if (req.method === "POST" && req.url === "/telegram") {
+      telegramWebhook(req, res);
+
+      return;
+    }
+
+    if (req.method === "GET" && req.url === "/health") {
       res.writeHead(200);
       res.end("OK");
+
       return;
     }
 
@@ -15,22 +22,5 @@ http
     res.end();
   })
   .listen(PORT, () => {
-    console.log(`HTTP server listening on ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
   });
-
-console.log("PID:", process.pid);
-console.log("Started at:", new Date().toISOString());
-
-async function bootstrap() {
-  try {
-    await bot.start({
-      onStart(botInfo) {
-        console.log(`Bot started as @${botInfo.username}`);
-      },
-    });
-  } catch (error) {
-    console.error("Failed to start bot:", error);
-  }
-}
-
-bootstrap();
