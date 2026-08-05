@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "final" : "rm -rf dist && tsc && node dist/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16",
+    "grammy": "^1"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "tsx": "^4",
+    "typescript": "^5"
+  }
+}
