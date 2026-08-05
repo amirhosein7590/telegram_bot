@@ -3,8 +3,11 @@ import { bot } from "../app/bot";
 
 export async function telegramWebhook(
   req: IncomingMessage,
-  res: ServerResponse,
+  res: ServerResponse
 ) {
+
+  console.log("WEBHOOK REQUEST RECEIVED");
+
   let body = "";
 
   req.on("data", (chunk) => {
@@ -12,19 +15,23 @@ export async function telegramWebhook(
   });
 
   req.on("end", async () => {
+
+    console.log("BODY:", body);
+
     try {
       const update = JSON.parse(body);
-      console.log(JSON.stringify(update, null, 2)); // for debug
 
       await bot.handleUpdate(update);
 
       res.writeHead(200);
       res.end("OK");
+
     } catch (error) {
-      console.error("Webhook Error:", error);
+      console.error("WEBHOOK ERROR:", error);
 
       res.writeHead(500);
-      res.end("Internal Server Error");
+      res.end("ERROR");
     }
+
   });
 }

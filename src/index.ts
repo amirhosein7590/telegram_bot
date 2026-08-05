@@ -6,6 +6,7 @@ const PORT = Number(process.env.PORT) || 3000;
 http
   .createServer((req, res) => {
     if (req.method === "POST" && req.url === "/telegram") {
+      console.log("REQUEST:", req.method, req.url);
       telegramWebhook(req, res);
 
       return;
